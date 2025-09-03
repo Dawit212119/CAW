@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // modern JS output
+    "module": "ESNext", // ESM support
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node", // resolve node modules
+    "strict": true, // strict TS checks
+    "skipLibCheck": true, // skip checking node_modules
+    "outDir": "dist" // compiled JS goes here
+  },
+  "include": ["src/**/*"]
+}
