@@ -13,7 +13,7 @@ export const protectRoute = async (
   try {
     const token = req.cookies.access_token;
     if (!token) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "token not found",
       });
     }
@@ -22,7 +22,7 @@ export const protectRoute = async (
       process.env.JWT_SECERT as string
     ) as decodeType;
     if (!decode) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Invalid Token",
       });
     }
@@ -35,7 +35,7 @@ export const protectRoute = async (
     next();
   } catch (error) {
     if (error instanceof Error) {
-      res.json({
+      return res.json({
         message: error.message,
       });
     }
