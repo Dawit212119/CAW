@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import { generateTOken } from "../lib/generateToken";
+import cloudinary from "../lib/cloudinary";
 export const signUp = async (req: Request, res: Response) => {
   const { fullname, email, password } = req.body;
   console.log(req.body);
@@ -47,5 +48,42 @@ export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-  } catch (error) {}
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credential" });
+    }
+    const verifyPassword = await bcrypt.compare(password, user.password);
+    if (!verifyPassword) {
+      return res.status(403).json({
+        message: "Password is Invalid!",
+      });
+    }
+    generateTOken(String(user._id), res);
+    res.status(200).json({
+      ...user,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    res.cookie("access_token", "", { maxAge: 0 });
+    res.status(200).json({ message: "logout successfull" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+  const { profilePic } = req.body;
+  const userId = req.user._id;
+  const uploadPic = await cloudinary.uploader.upload(profilePic);
+  const updateUser = await User.findByIdAndUpdate(
+    userId,
+    { userPic: uploadPic.secure_url },
+    { new: true }
+  );
+
+  res.status(200).json({ ...updateUser });
 };
