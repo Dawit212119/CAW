@@ -74,7 +74,14 @@ export const logout = async (req: Request, res: Response) => {
     res.status(500).json({ message: error });
   }
 };
-
+export const checkAuth = (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 export const updateProfile = async (req: Request, res: Response) => {
   const { profilePic } = req.body;
   const userId = req.user._id;
