@@ -14,6 +14,7 @@ interface AuthStore {
   updatingProfile: (data: string | ArrayBuffer | null) => void;
   Login: (data: object) => void;
   isLoggingIn: boolean;
+  Logout: () => void;
   isCheckingAuth: boolean;
   checkAuth: () => void;
 }
@@ -87,6 +88,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
       }
     } finally {
       set({ isUpdatingProfile: false });
+    }
+  },
+  Logout: async () => {
+    try {
+      await axiosInstance.post("/auth/signout");
+      toast.success("Logout successful");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Internal Server Error");
+      }
     }
   },
 }));
