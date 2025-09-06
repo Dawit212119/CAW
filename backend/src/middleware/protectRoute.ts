@@ -31,7 +31,7 @@ export const protectRoute = async (
     );
     if (!user) {
     }
-    req.user = user!;
+    req.user = user?.toObject()!;
     next();
   } catch (error) {
     if (error instanceof Error) {

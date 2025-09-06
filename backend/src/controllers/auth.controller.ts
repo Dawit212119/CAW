@@ -31,10 +31,9 @@ export const signUp = async (req: Request, res: Response) => {
       generateTOken(String(newUser._id), res);
       await newUser.save();
     }
+    const userObj = newUser.toObject();
     res.status(201).json({
-      id: newUser._id,
-      fullname: newUser.fullname,
-      email: newUser.email,
+      userObj,
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -58,8 +57,9 @@ export const login = async (req: Request, res: Response) => {
       });
     }
     generateTOken(String(user._id), res);
+    const userObj = user.toObject();
     res.status(200).json({
-      ...user,
+      userObj,
     });
   } catch (error) {
     res.status(500).json({ message: error });
@@ -91,6 +91,6 @@ export const updateProfile = async (req: Request, res: Response) => {
     { userPic: uploadPic.secure_url },
     { new: true }
   );
-
-  res.status(200).json({ ...updateUser });
+  const userObj = updateUser?.toObject();
+  res.status(200).json({ userObj });
 };

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const { isLoggingIn, login } = useAuthStore();
+  const { isLoggingIn, Login } = useAuthStore();
   const [FormData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,7 +22,7 @@ const Login = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const success = validateForm();
-    if (success === true) login(FormData);
+    if (success === true) Login(FormData);
   };
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
