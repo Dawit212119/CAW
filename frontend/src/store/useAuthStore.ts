@@ -11,19 +11,19 @@ interface AuthStore {
   isSigningUp: boolean;
   signup: (data: signupprops) => void;
   isUpdatingProfile: boolean;
-  updatingProfile: (data: string | ArrayBuffer | null) => void;
-  Login: (data: object) => void;
+  updatingProfile: (data: string | ArrayBuffer | null) => Promise<void>;
+  Login: (data: object) => Promise<void>;
   isLoggingIn: boolean;
-  Logout: () => void;
+  Logout: () => Promise<void>;
   isCheckingAuth: boolean;
-  checkAuth: () => void;
+  checkAuth: () => Promise<void>;
 }
 interface User {
   _id: string;
   fullname: string;
   userPic: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   email: string;
 }
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -34,8 +34,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isCheckingAuth: true,
   checkAuth: async () => {
     try {
-      const response = await axiosInstance.get("/auth/check");
-      console.log(response);
+      const response = await axiosInstance.get("/api/auth/check");
+      console.log(response.data);
       set({ authUser: response.data });
     } catch (error) {
       console.log("error in checkingAuth", error);
@@ -48,7 +48,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ isSigningUp: true });
     try {
       console.log(data);
-      const response = await axiosInstance.post("/auth/signup", data);
+      const response = await axiosInstance.post("/api/auth/signup", data);
       set({ authUser: response.data });
     } catch (error) {
       if (error instanceof Error) {
@@ -62,8 +62,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
   Login: async (data) => {
     try {
-      const response = await axiosInstance.post("/login", data);
+      console.log(data);
+      const response = await axiosInstance.post("/api/auth/login", data);
       set({ authUser: response.data });
+      console.log(response.data);
     } catch (error) {
       if (error instanceof Error) {
         set({ authUser: null });
@@ -78,7 +80,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
   updatingProfile: async (data) => {
     try {
       set({ isUpdatingProfile: true });
-      await axiosInstance.post("/auth/update-profile", { profilePic: data });
+      const response = await axiosInstance.post("/api/auth/update-profile", {
+        profilePic: data,
+      });
+      set({ authUser: response.data });
       toast.success("Profile Updated!");
     } catch (error) {
       if (error instanceof Error) {
@@ -92,7 +97,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
   Logout: async () => {
     try {
+      set({ isLoggingIn: true });
       await axiosInstance.post("/auth/signout");
+      set({ authUser: null });
       toast.success("Logout successful");
     } catch (error) {
       if (error instanceof Error) {
@@ -100,6 +107,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
       } else {
         toast.error("Internal Server Error");
       }
+    } finally {
+      set({
+        isLoggingIn: false,
+      });
     }
   },
 }));

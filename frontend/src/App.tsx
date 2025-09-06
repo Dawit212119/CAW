@@ -24,20 +24,20 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={authUser ? <Home /> : <Navigate to="/login" />}
+          element={authUser?._id ? <Home /> : <Navigate to="/login" />}
         />
         <Route
           path="/signup"
-          element={!authUser ? <SignUp /> : <Navigate to="/" />}
+          element={!authUser?._id ? <SignUp /> : <Navigate to="/" />}
         />
         <Route
           path="/login"
-          element={!authUser ? <Login /> : <Navigate to="/" />}
+          element={!authUser?._id ? <Login /> : <Navigate to="/" />}
         />
         <Route path="/settings" element={<Settings />} />
         <Route
           path="/profile"
-          element={!authUser ? <Profile /> : <Navigate to="/" />}
+          element={!authUser?._id ? <Profile /> : <Navigate to="/" />}
         />
       </Routes>
     </div>

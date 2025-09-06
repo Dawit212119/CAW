@@ -7,23 +7,24 @@ import AuthImagePattern from "../components/AuthImagePattern";
 
 const Login = () => {
   const { isLoggingIn, Login } = useAuthStore();
-  const [FormData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [password, setShowPassword] = useState(false);
   const validateForm = () => {
-    if (!FormData.email.trim()) return toast.error("Email required");
-    if (!/\S+@\S+\.\S+/.test(FormData.email))
+    if (!formData.email.trim()) return toast.error("Email required");
+    if (!/\S+@\S+\.\S+/.test(formData.email))
       return toast.error("Invalid email format");
-    if (!(FormData.password.length < 6)) return toast.error("");
-    if (!FormData.password.trim()) return toast.error("Password is required");
+    if (!(formData.password.length < 6)) return toast.error("password is ");
+    if (!formData.password.trim()) return toast.error("Password is required");
     return true;
   };
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const success = validateForm();
-    if (success === true) Login(FormData);
+    if (success === true) await Login(formData);
+    console.log(formData);
   };
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -40,7 +41,7 @@ const Login = () => {
             <p className="text-base-content/60">Sign in to your account</p>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
           <div className="form-control flex flex-col gap-2">
             <label className="label ">
               <span className="label-text font-medium">Email</span>
@@ -53,9 +54,9 @@ const Login = () => {
                 type="email"
                 className="input input-bordered w-full pl-10"
                 placeholder="email@gmail.com"
-                value={FormData.email}
+                value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...FormData, email: e.target.value })
+                  setFormData({ ...formData, email: e.target.value })
                 }
               />
             </div>
@@ -72,9 +73,9 @@ const Login = () => {
                 type={password ? "password" : "text"}
                 className="input input-bordered w-full pl-10 outline-none"
                 placeholder="********"
-                value={FormData.password}
+                value={formData.password}
                 onChange={(e) =>
-                  setFormData({ ...FormData, password: e.target.value })
+                  setFormData({ ...formData, password: e.target.value })
                 }
               />
               <button
