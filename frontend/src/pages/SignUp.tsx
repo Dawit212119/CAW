@@ -11,6 +11,7 @@ import React, { useState, type FormEvent } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import AuthImagePattern from "../components/AuthImagePattern";
 
 const SignUp = () => {
   const { isSigningUp, signup } = useAuthStore();
@@ -34,6 +35,7 @@ const SignUp = () => {
     console.log(e.target);
     const success = validateForm();
     if (success === true) signup(FormData);
+    console.log(FormData);
   };
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -146,10 +148,10 @@ const SignUp = () => {
       </div>
       {/*right side */}
 
-      {/* <AuthImagePattern
+      <AuthImagePattern
         title="join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
-      /> */}
+      />
     </div>
   );
 };

@@ -3,15 +3,14 @@ import {
   signUp,
   updateProfile,
   checkAuth,
+  login,
 } from "../controllers/auth.controller";
 import { protectRoute } from "../middleware/protectRoute";
 
 const router = Router();
 
 router.post("/signup", signUp);
-router.post("/login", (req, res) => {
-  res.send("login success");
-});
+router.post("/login", login);
 router.post("/signout", (req, res) => {
   res.send("signout");
 });

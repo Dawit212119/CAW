@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import AuthImagePattern from "../components/AuthImagePattern";
 
 const Login = () => {
   const { isLoggingIn, Login } = useAuthStore();
@@ -115,10 +116,10 @@ const Login = () => {
       </div>
       {/*right side */}
 
-      {/* <AuthImagePattern
-          title="join our community"
-          subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
-        /> */}
+      <AuthImagePattern
+        title="join our community"
+        subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
+      />
     </div>
   );
 };
