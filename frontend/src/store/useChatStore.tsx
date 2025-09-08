@@ -9,8 +9,12 @@ interface ChatStore {
   isMessagesLoading: boolean;
   getMessages: (userId: string) => Promise<void>;
   getUsers: () => Promise<void>;
-  sendMessages: (messagesData: string) => Promise<void>;
-  setSelectedUser: (selectedUser: User) => void;
+  sendMessages: (messagesData: messagesProps) => Promise<void>;
+  setSelectedUser: (selectedUser: User | null) => void;
+}
+interface messagesProps {
+  text: string | "";
+  image: string | null;
 }
 interface User {
   _id: string;
